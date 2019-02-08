@@ -10,17 +10,24 @@ import ShaderProgram, {Shader} from './rendering/gl/ShaderProgram';
 // Define an object with application parameters and button callbacks
 // This will be referred to by dat.GUI's functions that add GUI elements.
 const controls = {
-  tesselations: 5,
-  'Load Scene': loadScene, // A function pointer, essentially
+  'Shading Mode': changeShadingMode,
+  Ripeness: 0.5
 };
 
 let square: Square;
 let time: number = 0;
+let prevShadingMode: number = 0;
+let shadingMode: number = 0;
+let prevRipeness: number = 0.0;
 
 function loadScene() {
   square = new Square(vec3.fromValues(0, 0, 0));
   square.create();
   // time = 0;
+}
+
+function changeShadingMode() {
+  shadingMode = (shadingMode + 1) % 2;
 }
 
 function main() {
@@ -47,6 +54,8 @@ function main() {
 
   // Add controls to the gui
   const gui = new DAT.GUI();
+  gui.add(controls, 'Shading Mode');
+  gui.add(controls, 'Ripeness', 0.0, 1.0);
 
   // get canvas and webgl context
   const canvas = <HTMLCanvasElement> document.getElementById('canvas');
@@ -61,7 +70,7 @@ function main() {
   // Initial call to load scene
   loadScene();
 
-  const camera = new Camera(vec3.fromValues(0, 0, 10), vec3.fromValues(0, 0, 0));
+  const camera = new Camera(vec3.fromValues(0, 15, 40), vec3.fromValues(0, 0, 0));
 
   const renderer = new OpenGLRenderer(canvas);
   renderer.setClearColor(164.0 / 255.0, 233.0 / 255.0, 1.0, 1);
@@ -83,6 +92,16 @@ function main() {
     gl.viewport(0, 0, window.innerWidth, window.innerHeight);
     renderer.clear();
     processKeyPresses();
+    if (prevShadingMode !== shadingMode)
+    {
+      prevShadingMode = shadingMode;
+      flat.setShaderMode(shadingMode);
+    }
+    if (prevRipeness !== controls.Ripeness)
+    {
+      prevRipeness = controls.Ripeness;
+      flat.setRipeness(prevRipeness);
+    }
     renderer.render(camera, flat, [
       square,
     ], time);
