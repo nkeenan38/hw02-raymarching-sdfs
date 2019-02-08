@@ -9,11 +9,11 @@ Demo Link: https://nkeenan38.github.io/hw02-raymarching-sdfs
 Avocados
 --------------
 
-![](avocado_open.png)
+![](avocado_closed.png)
 
 The avocados halves are made with the smooth union of two spheres to get the characteristic avocado shape. A box the size of half the avocado is subtracted from this shape. The resulting shape is reflected across the x-axis to create the two halves coming together and apart. Simalrly, a sphere where the avocado seed should be is subtracted from this shape. The animation is created by adding the output of a gain function to the x-ccordinate of the avocado times some amplitude. The avocados are repeated infinitely in the y-direction by modding the y-coordinate of p. Green is the default color of the scene that changes if certain conditions are met. For the avocado, if the box subtracts from the point we are rendering, the surface is colored yellow (except for a small radius around the edge).
 
-![](avocado_closed.png)
+![](avocado_open.png)
 
 Avocado Pit / Egg Yolk
 ------
